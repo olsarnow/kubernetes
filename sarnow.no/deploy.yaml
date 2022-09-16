@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apachephp
+spec:
+  selector:
+    matchLabels:
+      app: apachephp
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: apachephp
+    spec:
+      containers:
+      - name: apachephp
+        image: olsarnow/apachephp
+        ports:
+        - containerPort: 80
+        volumeMounts:
+          #        - mountPath: /etc/nginx # mount nginx-conf volumn to /etc/nginx
+          #readOnly: true
+          #name: nginx-conf
+        - mountPath: /var/log/apache2
+          name: log
+        - mountPath: /var/www/html
+          name: www-data
+      volumes:
+        #      - name: nginx-conf
+        #configMap:
+        #  name: nginx-conf # place ConfigMap `nginx-conf` on /etc/nginx
+        #  items:
+        #    - key: nginx.conf
+        #      path: nginx.conf
+      - name: log
+        emptyDir: {}
+      - name: www-data
+        emptyDir: {}
+      initContainers:
+      - name: git-cloner
+        image: alpine/git
+        args:
+            - clone
+            - --single-branch
+            - --
+            - https://github.com/olsarnow/sarnow.no
+            - /data
+        volumeMounts:
+        - mountPath: /data
+          name: www-data
