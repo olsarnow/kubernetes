@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: restart
+  name: delete
   namespace: www
 spec:
   concurrencyPolicy: Forbid
@@ -16,10 +16,10 @@ spec:
           restartPolicy: Never
           containers:
             - name: kubectl
-              image: bitnami/kubectl:1.22.3
+              image: bitnami/kubectl
               command:
                 - 'kubectl'
                 - 'delete'
-                - '--all'
                 - 'pods'
+                - '--all'
                 - '--namespace=www'

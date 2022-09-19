@@ -12,6 +12,11 @@ spec:
       labels:
         app: apachephp
     spec:
+      volumes:
+      - name: log
+        emptyDir: {}
+      - name: www-data
+        emptyDir: {}
       containers:
       - name: apachephp
         image: olsarnow/apachephp
@@ -25,24 +30,10 @@ spec:
         ports:
         - containerPort: 80
         volumeMounts:
-          #        - mountPath: /etc/nginx # mount nginx-conf volumn to /etc/nginx
-          #readOnly: true
-          #name: nginx-conf
-        - mountPath: /var/log/apache2
-          name: log
+        - name: log
+          mountPath: /var/log/apache2
         - mountPath: /var/www/html
           name: www-data
-      volumes:
-        #      - name: nginx-conf
-        #configMap:
-        #  name: nginx-conf # place ConfigMap `nginx-conf` on /etc/nginx
-        #  items:
-        #    - key: nginx.conf
-        #      path: nginx.conf
-      - name: log
-        emptyDir: {}
-      - name: www-data
-        emptyDir: {}
       initContainers:
       - name: git-cloner
         image: alpine/git
