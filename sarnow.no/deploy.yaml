@@ -17,11 +17,11 @@ spec:
         image: olsarnow/apachephp
         resources:
           requests:
-            memory: "16Mi"
-            cpu: "50m"
-          limits:
             memory: "32Mi"
-            cpu: "100m"
+            cpu: "125m"
+          limits:
+            memory: "128Mi"
+            cpu: "250m"
         ports:
         - containerPort: 80
         volumeMounts:
